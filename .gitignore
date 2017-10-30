@@ -26,3 +26,5 @@
 desbox
 genkey
 *.o
+.idea
+cmake-build-debug
