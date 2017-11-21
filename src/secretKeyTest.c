@@ -313,7 +313,7 @@ void byteSub(unsigned char state[][4]) {
     state[3][3] = aes_sbox[state[3][3] >> 4][state[3][3] & 0x0F];
 }
 
-int modInverse(int a, int m) {
+long modInverse(long a, long m) {
     a = a % m;
     for (int x = 1; x < m; x++) if ((a * x) % m == 1) return x;
 }
@@ -332,18 +332,21 @@ long mod_exp (long b, long e, long m)
 }
 void cipher_message (long msg, long e, long modulo)
 {
+    printf("==============================\n");
     printf("Cipher Message with RSA: \n");
     printf("msg= %ld, number_e=%ld, modulo=%ld \n",msg,e,modulo);
     printf("Result: %ld\n", mod_exp(msg,e,modulo));
 }
 void decipher_message (long msg, long e, long modulo)
 {
+    printf("==============================\n");
     printf("DeCipher Message with RSA: \n");
     printf("msg= %ld, number_e=%ld, modulo=%ld \n",msg,e,modulo);
-    int d=calculate_d_RSA(modulo,e);
+    long d=calculate_d_RSA(modulo,e);
     printf("Result: %ld\n", mod_exp(msg,d,modulo));
 }
-int calculate_d_RSA(int numx, int numy) {
+long calculate_d_RSA(int numx, int numy) {
+    printf("*****************************\n");
     printf("Number are %d, %d\n",numx,numy);
     int factores[100];     //Arreglo para almacenar factores de "numero".
     int i_factores = 0;       //Indice para recorrer el arreglo "factores[]".
@@ -372,11 +375,23 @@ int calculate_d_RSA(int numx, int numy) {
         i++;
     }
     int x=factores[0]*factores[1];
-    int result=modInverse(numy,x);
-    printf("D: %d\n",result);
+    long result=modInverse(numy,x);
+    printf("D: %ld\n",result);
     printf("\n");
     return result;
 
 }
-
+void decipher_ElGammal(long message, long alphabv,long privateKey,long group){
+    printf("==============================\n");
+    printf("Decipher ElGammal: \n");
+    long alphavb = mod_exp(alphabv,privateKey,group);
+    long inverseAlphavb=modInverse(alphavb,group);
+    printf("Result %ld \n",(message*inverseAlphavb)% group);
+}
+void generate_public_key_ElGammal(long alpha,long privateKey,long group){
+    printf("==============================\n");
+    printf("Generate public key ElGammal: \n");
+    printf("alpha= %ld, private key =%ld, group=%ld \n",alpha,privateKey,group);
+    printf("Result: %ld\n", mod_exp(alpha,privateKey,group));
+}
 // End of file

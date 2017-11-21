@@ -93,10 +93,14 @@ int main(int argc, char ** argv)
         printf("\n");
     }
     printf("\n");
-    calculate_d_RSA(141, 57);
-    cipher_message(27,461,1177);
-    decipher_message(74,57,141);
-
+    calculate_d_RSA(123, 21);
+    calculate_d_RSA(118, 35);
+    calculate_d_RSA(10763, 809);
+    calculate_d_RSA(34547, 29905);
+    cipher_message(18,2139,4387);//A->B (message,eb,nb)
+    decipher_message(11,251,391);//B received A (message, eb,nb)
+    generate_public_key_ElGammal(11,94,163);
+    decipher_ElGammal(7,15,42,61);//message,alphabv,privateKey,group
 
 
     return EXIT_SUCCESS;
