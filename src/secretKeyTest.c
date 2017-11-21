@@ -313,5 +313,70 @@ void byteSub(unsigned char state[][4]) {
     state[3][3] = aes_sbox[state[3][3] >> 4][state[3][3] & 0x0F];
 }
 
+int modInverse(int a, int m) {
+    a = a % m;
+    for (int x = 1; x < m; x++) if ((a * x) % m == 1) return x;
+}
+long mod_exp (long b, long e, long m)
+{
+    long r = 1;
+    long k = 0;
+    while (e > 0)
+    {
+        if ((e & 1) > 0)
+            r = r * b % m;
+        e >>= 1;			/* mas rapido las potencias de dos son adquiridas asi, 1,10,100,1000 (binario) */
+        b = (b * b) % m;
+    }
+    return r;
+}
+void cipher_message (long msg, long e, long modulo)
+{
+    printf("Cipher Message with RSA: \n");
+    printf("msg= %ld, number_e=%ld, modulo=%ld \n",msg,e,modulo);
+    printf("Result: %ld\n", mod_exp(msg,e,modulo));
+}
+void decipher_message (long msg, long e, long modulo)
+{
+    printf("DeCipher Message with RSA: \n");
+    printf("msg= %ld, number_e=%ld, modulo=%ld \n",msg,e,modulo);
+    int d=calculate_d_RSA(modulo,e);
+    printf("Result: %ld\n", mod_exp(msg,d,modulo));
+}
+int calculate_d_RSA(int numx, int numy) {
+    printf("Number are %d, %d\n",numx,numy);
+    int factores[100];     //Arreglo para almacenar factores de "numero".
+    int i_factores = 0;       //Indice para recorrer el arreglo "factores[]".
+    int i = 2;             //Empezaremos a verificar todos los factores desde 2.
+    while (i <= numx) {
+        if ((numx % i) == 0)
+        {
+            factores[i_factores] = i;
+            numx = numx / i;
+            i_factores++;
+            continue;
+        }
+        i++;
+    }
+    i = 0;
+    printf("The number primes are: ");
+    while (i < i_factores) {
+        printf("%d, ", factores[i]);
+        factores[i]-=1;
+        i++;
+    }
+    i=0;
+    printf("\nThe new number: ");
+    while (i < i_factores) {
+        printf("%d, ", factores[i]);
+        i++;
+    }
+    int x=factores[0]*factores[1];
+    int result=modInverse(numy,x);
+    printf("D: %d\n",result);
+    printf("\n");
+    return result;
+
+}
 
 // End of file
