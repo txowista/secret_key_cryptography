@@ -93,15 +93,30 @@ int main(int argc, char ** argv)
         printf("\n");
     }
     printf("\n");
-    calculate_d_RSA(123, 21);
-    calculate_d_RSA(118, 35);
-    calculate_d_RSA(10763, 809);
-    calculate_d_RSA(34547, 29905);
-    cipher_message(18,2139,4387);//A->B (message,eb,nb)
-    decipher_message(11,251,391);//B received A (message, eb,nb)
-    generate_public_key_ElGammal(11,94,163);
-    decipher_ElGammal(7,15,42,61);//message,alphabv,privateKey,group
+    calculate_d_RSA(34121, 15775);
+    calculate_d_RSA(7493, 5903);
+    calculate_d_RSA(2893, 1869);
+    calculate_d_RSA(35723, 29159);
+    cipher_message(77,397,473);//A->B (message,eb,nb)
+    decipher_message(550,2407,4747);//B received A (message, eb,nb)
 
 
+    generate_public_key_ElGammal(30,52,79);//alpha,privateKey,group
+    decipher_ElGammal(268,136,67,269);//message,alphabv,privateKey,group
+
+    /**DIGITAL SIGNATURE RSA **/
+    //A  (nA , eA ) = (34121,15775) dA= 26623
+    /*CIPHER TO SIGN A to B sign with private key (message_cipher,da,na)*/
+    cipher_message(16346,26623,34121);
+    /*DECIPHER B- msg received A sign with private key (message_cipher,ea,na)*/
+    cipher_message(20904,15775,34121);
+    /**DIGITAL SIGNATURE RSA **/
+
+    /**DIGITAL SIGNATURE ELGAMAL**/
+    //A pk=28236 alpha=7 group=15485863
+    sign_ElGammal(128688,7,90725,28236,15485863);
+    int verify=verify_sign_ElGammal(128688,7,7635256,11047464,12506884,15485863);
+    printf("Result: %s \n",verify?"TRUE":"FALSE");
+    /**DIGITAL SIGNATURE ELGAMAL**/
     return EXIT_SUCCESS;
 }

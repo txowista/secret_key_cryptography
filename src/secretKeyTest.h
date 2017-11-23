@@ -12,6 +12,8 @@ long modInverse(long a, long m);
 long mod_exp (long b, long e, long m);
 void cipher_message (long msg, long e, long modulo);
 void decipher_message (long msg, long e, long modulo);
-void generate_public_key_ElGammal(long alpha,long privateKey,long group);
+long generate_public_key_ElGammal(long alpha,long privateKey,long group);
 void decipher_ElGammal(long message, long alphabv,long privateKey,long group);
+long sign_ElGammal(long message,long alpha, long h,long privateKey,long group);
+bool verify_sign_ElGammal(long message,long alpha,long r, long s,long publickey,long group);
 #endif

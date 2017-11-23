@@ -388,10 +388,36 @@ void decipher_ElGammal(long message, long alphabv,long privateKey,long group){
     long inverseAlphavb=modInverse(alphavb,group);
     printf("Result %ld \n",(message*inverseAlphavb)% group);
 }
-void generate_public_key_ElGammal(long alpha,long privateKey,long group){
+long generate_public_key_ElGammal(long alpha,long privateKey,long group){
     printf("==============================\n");
     printf("Generate public key ElGammal: \n");
     printf("alpha= %ld, private key =%ld, group=%ld \n",alpha,privateKey,group);
-    printf("Result: %ld\n", mod_exp(alpha,privateKey,group));
+    long result=mod_exp(alpha,privateKey,group);
+    printf("Result: %ld\n", result);
+    return result;
+}
+long sign_ElGammal(long message,long alpha, long h,long privateKey,long group){
+    printf("==============================\n");
+    printf("Signature key ElGammal: \n");
+    long publicKeyELGamal=mod_exp(alpha,privateKey,group);//alpha,privateKey,group
+    long group_1=group-1;
+    long r=mod_exp(alpha,h,group);
+    printf("h=90725 R= %ld\n",r);
+    //s=(m-a*r)*h^-1 mod(p-1)
+    long s= ((message-(privateKey*r))*modInverse(h,group_1))%(group_1);
+    if(s<0){
+        s+=group_1;
+    }
+    printf("(r,s)= (%ld,%ld)\n",r,s);
+}
+bool verify_sign_ElGammal(long message,long alpha,long r, long s,long publickey,long group){
+    printf("==============================\n");
+    printf("Verifiy Signature key ElGammal: \n");
+    long alphaHS=mod_exp(r,s,group);
+    long alphaar=mod_exp(publickey,r,group);
+    long alpham= mod_exp(alpha,message,group);
+    long alpham2= (alphaHS*alphaar)%group;
+    return (alpham==alpham2);
+
 }
 // End of file
